@@ -3,16 +3,33 @@ defmodule Aoc2021Ex do
   Documentation for `Aoc2021Ex`.
   """
 
-  @doc """
-  Hello world.
+  def make_module(day) do
+    num = String.pad_leading(Integer.to_string(day), 2, "0")
+    mod_name = "Day#{num}"
+    file = "lib/days/#{mod_name}.ex"
 
-  ## Examples
+    if File.exists?(file) do
+      raise "file #{file} already exists"
+    else
+      src =
+        File.read!("lib/days/template.ex")
+        |> String.replace("Template", mod_name)
 
-      iex> Aoc2021Ex.hello()
-      :world
+      File.write!(file, src)
+      Code.compile_file(file)
+    end
+  end
 
-  """
-  def hello do
-    :world
+  defmacro reload! do
+    IEx.Helpers.recompile()
+
+    for i <- 1..25 do
+      num = String.pad_leading(Integer.to_string(i), 2, "0")
+      mod = Module.concat(Aoc2021Ex, "Day#{num}")
+
+      quote do
+        alias unquote(mod)
+      end
+    end
   end
 end
