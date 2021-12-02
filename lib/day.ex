@@ -48,6 +48,11 @@ defmodule Aoc2021Ex.Day do
               input_lines()
               |> Enum.map(&String.to_integer/1)
             end
+
+            def input_tokens do
+              input_lines()
+              |> Enum.map(&String.split/1)
+            end
           end
         ]
     end
