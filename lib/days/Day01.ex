@@ -1,10 +1,6 @@
 defmodule Aoc2021Ex.Day01 do
   use Aoc2021Ex.Day
 
-  def solve do
-    {solve1(), solve2()}
-  end
-
   def solve1 do
     num_increases(input_ints())
   end

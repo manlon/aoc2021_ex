@@ -1,10 +1,6 @@
 defmodule Aoc2021Ex.Day03 do
   use Aoc2021Ex.Day
 
-  def solve do
-    {solve1(), solve2()}
-  end
-
   def solve1 do
     lines = input_lines()
     size = hd(lines) |> String.length()

@@ -1,10 +1,6 @@
 defmodule Aoc2021Ex.Day04 do
   use Aoc2021Ex.Day
 
-  def solve do
-    {solve1(), solve2()}
-  end
-
   def solve1 do
     {nums, cards} = parse_input()
 
@@ -55,19 +51,9 @@ defmodule Aoc2021Ex.Day04 do
   end
 
   def parse_input do
-    [number_input | cards_input] =
-      input()
-      |> String.split("\n\n")
-
-    numbers =
-      number_input
-      |> String.split(",")
-      |> Enum.map(&String.to_integer/1)
-
-    cards =
-      cards_input
-      |> Enum.map(&parse_card/1)
-
+    [number_input | cards_input] = String.split(input(), "\n\n")
+    numbers = comma_int_list(number_input)
+    cards = Enum.map(cards_input, &parse_card/1)
     {numbers, cards}
   end
 

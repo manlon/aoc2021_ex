@@ -1,10 +1,6 @@
 defmodule Aoc2021Ex.Day02 do
   use Aoc2021Ex.Day
 
-  def solve do
-    {solve1(), solve2()}
-  end
-
   def solve1 do
     Enum.reduce(instructions(), {0, 0}, &move/2)
     |> then(fn {h, d} -> h * d end)

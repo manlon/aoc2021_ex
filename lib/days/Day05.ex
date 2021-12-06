@@ -1,18 +1,12 @@
 defmodule Aoc2021Ex.Day05 do
   use Aoc2021Ex.Day
 
-  def solve do
-    {solve1(), solve2()}
-  end
-
   def solve1 do
-    map_from_points(ortho_points())
-    |> Enum.count(fn {_, v} -> v > 1 end)
+    count_overlaps(ortho_points())
   end
 
   def solve2 do
-    map_from_points(ortho_points() ++ diag_points())
-    |> Enum.count(fn {_, v} -> v > 1 end)
+    count_overlaps(ortho_points() ++ diag_points())
   end
 
   def ortho_lines do
@@ -34,7 +28,6 @@ defmodule Aoc2021Ex.Day05 do
     end)
   end
 
-  @spec diag_points :: list
   def diag_points do
     diag_lines()
     |> Enum.flat_map(&expand_diag/1)
@@ -53,20 +46,18 @@ defmodule Aoc2021Ex.Day05 do
     Enum.zip(x1..x2, y1..y2)
   end
 
-  def map_from_points(points) do
+  def count_overlaps(points) do
     Enum.reduce(points, %{}, fn pt, map ->
       Map.update(map, pt, 1, &(&1 + 1))
     end)
+    |> Enum.count(fn {_, v} -> v > 1 end)
   end
 
   def parse_input do
     input_lines()
     |> Enum.map(fn line ->
       String.split(line, " -> ")
-      |> Enum.map(fn s ->
-        String.split(s, ",")
-        |> Enum.map(&String.to_integer/1)
-      end)
+      |> Enum.map(&comma_int_list/1)
       |> Enum.map(&List.to_tuple/1)
     end)
     |> Enum.map(&List.to_tuple/1)
@@ -85,7 +76,6 @@ defmodule Aoc2021Ex.Day05 do
     end
     |> Enum.join("\n")
     |> IO.puts()
-
     map
   end
 end
