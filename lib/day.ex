@@ -30,6 +30,8 @@ defmodule Aoc2021Ex.Day do
       end ++
         [
           quote do
+            def solve, do: {solve1(), solve2()}
+
             def input_file do
               "input/input#{unquote(module_num)}.txt"
             end
@@ -52,6 +54,17 @@ defmodule Aoc2021Ex.Day do
             def input_tokens do
               input_lines()
               |> Enum.map(&String.split/1)
+            end
+
+            def comma_int_list(s) do
+              String.trim(s)
+              |> String.split(",")
+              |> Enum.map(&String.to_integer/1)
+            end
+
+            def input_comma_ints do
+              input()
+              |> comma_int_list()
             end
           end
         ]
