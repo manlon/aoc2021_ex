@@ -17,9 +17,7 @@ defmodule Aoc2021Ex.Day10 do
   def score_compl([], acc), do: acc
   def score_compl([char | rest], acc), do: score_compl(rest, acc * 5 + @compl_score[char])
 
-  def parsed_input(), do: Enum.map(input_lines(), &parse/1)
-
-  def parse(line, acc \\ [])
+  def parsed_input(), do: (for l <- input_lines(), do: parse(l, []))
   def parse(<<c, rest::binary>>, acc) when c in '([{<', do: parse(rest, [@flip[c] | acc])
   def parse(<<c, rest::binary>>, [c | acc]), do: parse(rest, acc)
   def parse(<<c, _::binary>>, _), do: {:invalid, c}
