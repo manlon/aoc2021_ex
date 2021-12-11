@@ -2,12 +2,12 @@ defmodule Aoc2021Ex.Day09 do
   use Aoc2021Ex.Day
 
   def solve1 do
-    map = input_map()
+    map = input_int_map()
     Enum.sum(Enum.map(lowpoints(map), &(Map.get(map, &1) + 1)))
   end
 
   def solve2 do
-    map = input_map()
+    map = input_int_map()
 
     Enum.map(lowpoints(map), fn pt -> length(expand_basin(map, [pt], [])) end)
     |> Enum.sort(:desc)
@@ -32,19 +32,5 @@ defmodule Aoc2021Ex.Day09 do
     Enum.flat_map(points, fn {r, c} -> [{r + 1, c}, {r - 1, c}, {r, c + 1}, {r, c - 1}] end)
     |> Enum.uniq()
     |> Enum.filter(&(Map.has_key?(map, &1) && &1 not in points))
-  end
-
-  def input_map do
-    input_lines()
-    |> Enum.map(fn line ->
-      String.graphemes(line)
-      |> Enum.map(&String.to_integer/1)
-    end)
-    |> Enum.with_index()
-    |> Enum.reduce(%{}, fn {line, lineno}, map ->
-      Enum.reduce(Enum.with_index(line), map, fn {val, colno}, map ->
-        Map.put(map, {lineno, colno}, val)
-      end)
-    end)
   end
 end

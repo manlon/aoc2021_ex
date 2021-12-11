@@ -66,6 +66,20 @@ defmodule Aoc2021Ex.Day do
               input()
               |> comma_int_list()
             end
+
+            def input_int_map do
+              input_lines()
+              |> Enum.map(fn line ->
+                String.graphemes(line)
+                |> Enum.map(&String.to_integer/1)
+              end)
+              |> Enum.with_index()
+              |> Enum.reduce(%{}, fn {line, lineno}, map ->
+                Enum.reduce(Enum.with_index(line), map, fn {val, colno}, map ->
+                  Map.put(map, {lineno, colno}, val)
+                end)
+              end)
+            end
           end
         ]
     end
