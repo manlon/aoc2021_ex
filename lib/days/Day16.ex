@@ -18,27 +18,21 @@ defmodule Aoc2021Ex.Day16 do
 
   def consume_packet(<<version::3, typid::3, 0::1, subpack_len::15, rest::bitstring>>) do
     <<subpacket_data::bitstring-size(subpack_len), rest::bitstring>> = rest
-    subpackets = consume_all(subpacket_data, [])
+    {subpackets, _} = consume_upto(subpacket_data)
     {{version, typid, subpackets}, rest}
   end
 
   def consume_packet(<<version::3, typid::3, 1::1, num_subs::11, rest::bitstring>>) do
-    {subs, rest} = consume_n(rest, num_subs, [])
+    {subs, rest} = consume_upto(rest, num_subs)
     {{version, typid, subs}, rest}
   end
 
-  def consume_all("", acc), do: Enum.reverse(acc)
-
-  def consume_all(data, acc) do
+  def consume_upto(data, upto \\ :infinity, n \\ 0, acc \\ [])
+  def consume_upto("", _, _, acc), do: {Enum.reverse(acc), ""}
+  def consume_upto(data, n, n, acc), do: {Enum.reverse(acc), data}
+  def consume_upto(data, upto, n, acc) do
     {pkt, rest} = consume_packet(data)
-    consume_all(rest, [pkt | acc])
-  end
-
-  def consume_n(data, 0, acc), do: {Enum.reverse(acc), data}
-
-  def consume_n(data, n, acc) do
-    {pkt, rest} = consume_packet(data)
-    consume_n(rest, n - 1, [pkt | acc])
+    consume_upto(rest, upto, n + 1, [pkt | acc])
   end
 
   def consume_literal(<<1::1, val::4, rest::bitstring>>, acc) do
