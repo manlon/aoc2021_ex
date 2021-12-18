@@ -31,11 +31,6 @@ defmodule Aoc2021Ex.Day18 do
     end
   end
 
-  def add_to_first_int(list, int, lhs \\ [])
-  def add_to_first_int([], _, lhs), do: Enum.reverse(lhs)
-  def add_to_first_int([i | rest], n, l) when is_integer(i), do: Enum.reverse(l) ++ [i + n | rest]
-  def add_to_first_int([x | rest], int, lhs), do: add_to_first_int(rest, int, [x | lhs])
-
   def explode(tokens, lhs \\ [], depth \\ 0)
 
   def explode(["[", a, b, "]" | rest], lhs, 4) when is_integer(a) and is_integer(b) do
@@ -59,6 +54,11 @@ defmodule Aoc2021Ex.Day18 do
   end
 
   def split([other | rest], lhs), do: split(rest, [other | lhs])
+
+  def add_to_first_int(list, int, lhs \\ [])
+  def add_to_first_int([], _, lhs), do: Enum.reverse(lhs)
+  def add_to_first_int([i | rest], n, l) when is_integer(i), do: Enum.reverse(l) ++ [i + n | rest]
+  def add_to_first_int([x | rest], int, lhs), do: add_to_first_int(rest, int, [x | lhs])
 
   def magnitude(list, lhs \\ [])
   def magnitude([x], _) when is_integer(x), do: x
