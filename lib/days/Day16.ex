@@ -30,6 +30,7 @@ defmodule Aoc2021Ex.Day16 do
   def consume_upto(data, upto \\ :infinity, n \\ 0, acc \\ [])
   def consume_upto("", _, _, acc), do: {Enum.reverse(acc), ""}
   def consume_upto(data, n, n, acc), do: {Enum.reverse(acc), data}
+
   def consume_upto(data, upto, n, acc) do
     {pkt, rest} = consume_packet(data)
     consume_upto(rest, upto, n + 1, [pkt | acc])
