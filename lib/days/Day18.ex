@@ -62,13 +62,9 @@ defmodule Aoc2021Ex.Day18 do
 
   def magnitude(list, lhs \\ [])
   def magnitude([x], _) when is_integer(x), do: x
-
-  def magnitude(["[", a, b, "]" | rest], lhs) when is_integer(a) and is_integer(b) do
-    mag = 3 * a + 2 * b
-    magnitude(Enum.reverse(lhs) ++ [mag | rest])
-  end
-
+  def magnitude(["[", a, b, "]" | rest], lhs), do: magnitude(rest, [3 * a + 2 * b | lhs])
   def magnitude([x | rest], lhs), do: magnitude(rest, [x | lhs])
+  def magnitude([], lhs), do: magnitude(Enum.reverse(lhs))
 
   def parse_input, do: for(line <- input_lines(), do: parse_line(line))
 

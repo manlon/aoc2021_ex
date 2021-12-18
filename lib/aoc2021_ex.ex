@@ -35,7 +35,7 @@ defmodule Aoc2021Ex do
     |> Enum.with_index()
     |> Enum.map(fn {mod, i} ->
       {time, res} = :timer.tc(fn -> apply(mod, :solve, []) end)
-      IO.inspect(day: i, result: res, time: time)
+      IO.inspect(day: i + 1, result: res, time: time)
     end)
     :ok
   end

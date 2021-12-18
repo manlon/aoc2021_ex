@@ -45,7 +45,7 @@ defmodule Aoc2021Ex.Day13 do
         if MapSet.member?(map, {x, y}) do
           "#"
         else
-          "."
+          " "
         end
       end
     end
