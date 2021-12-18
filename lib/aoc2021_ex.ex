@@ -6,25 +6,38 @@ defmodule Aoc2021Ex do
 
   def solve_all do
     [
-      Aoc2021Ex.Day01.solve,
-      Aoc2021Ex.Day02.solve,
-      Aoc2021Ex.Day03.solve,
-      Aoc2021Ex.Day04.solve,
-      Aoc2021Ex.Day05.solve,
-      Aoc2021Ex.Day06.solve,
-      Aoc2021Ex.Day07.solve,
-      Aoc2021Ex.Day08.solve,
-      Aoc2021Ex.Day09.solve,
-      Aoc2021Ex.Day10.solve,
-      Aoc2021Ex.Day11.solve,
-      Aoc2021Ex.Day12.solve,
-      Aoc2021Ex.Day13.solve,
-      Aoc2021Ex.Day14.solve,
-      Aoc2021Ex.Day15.solve,
-      Aoc2021Ex.Day16.solve,
-      Aoc2021Ex.Day17.solve,
-      Aoc2021Ex.Day18.solve,
+      Aoc2021Ex.Day01,
+      Aoc2021Ex.Day02,
+      Aoc2021Ex.Day03,
+      Aoc2021Ex.Day04,
+      Aoc2021Ex.Day05,
+      Aoc2021Ex.Day06,
+      Aoc2021Ex.Day07,
+      Aoc2021Ex.Day08,
+      Aoc2021Ex.Day09,
+      Aoc2021Ex.Day10,
+      Aoc2021Ex.Day11,
+      Aoc2021Ex.Day12,
+      Aoc2021Ex.Day13,
+      Aoc2021Ex.Day14,
+      Aoc2021Ex.Day15,
+      Aoc2021Ex.Day16,
+      Aoc2021Ex.Day17,
+      Aoc2021Ex.Day18,
+      #Aoc2021Ex.Day19,
+      #Aoc2021Ex.Day20,
+      #Aoc2021Ex.Day21,
+      #Aoc2021Ex.Day22,
+      #Aoc2021Ex.Day23,
+      #Aoc2021Ex.Day24,
+      #Aoc2021Ex.Day25
     ]
+    |> Enum.with_index()
+    |> Enum.map(fn {mod, i} ->
+      {time, res} = :timer.tc(fn -> apply(mod, :solve, []) end)
+      IO.inspect(day: i, result: res, time: time)
+    end)
+    :ok
   end
 
   def make_module(day) do
