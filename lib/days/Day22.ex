@@ -2,66 +2,45 @@ defmodule Aoc2021Ex.Day22 do
   use Aoc2021Ex.Day
 
   def solve1 do
-    for {onoff, [{minx, maxx}, {miny, maxy}, {minz, maxz}]} <- parsed_input(), reduce: %{} do
-      map ->
-        IO.inspect({onoff, {minx, maxx}, {miny, maxy}, {minz, maxz}})
+    target_region = [{-50, 50}, {-50, 50}, {-50, 50}]
 
-        for x <- minx..maxx,
-            x in -50..50,
-            y <- miny..maxy,
-            y in -50..50,
-            z <- minz..maxz,
-            z in -50..50,
-            reduce: map do
-          map ->
-            Map.put(map, {x, y, z}, onoff)
-        end
-    end
-    |> Map.values()
-    |> Enum.sum()
+    instructions =
+      for {onoff, region} <- parsed_input(),
+          overlap = region_overlap(target_region, region),
+          overlap != nil do
+        {onoff, overlap}
+      end
+
+    num_lights(instructions)
   end
 
   def solve2 do
-    parsed_input()
-    |> Enum.reverse()
-    |> Enum.reduce({[], []}, fn {onoff, region}, {offs, ons} ->
+    num_lights(parsed_input())
+  end
+
+  def num_lights(instructions) do
+    Enum.reverse(instructions)
+    |> Enum.reduce({[], []}, fn {onoff, region}, {ons, seen} ->
       case onoff do
         # on
         1 ->
-          new_ons =
-            subtract_all([region], ons ++ offs)
-            |> subtract_all(ons)
-
-          {offs, new_ons ++ ons}
+          new_ons = subtract_all([region], seen)
+          {new_ons ++ ons, [region | seen]}
 
         # off
         0 ->
-          new_offs = subtract_all([region], ons ++ offs)
-
-          {new_offs ++ offs, ons}
+          {ons, [region | seen]}
       end
     end)
+    |> then(fn {ons, _} -> Enum.map(ons, &region_size/1) end)
+    |> Enum.sum()
   end
 
   def region_overlap([xs1, ys1, zs1], [xs2, ys2, zs2]) do
-    case coord_overlap(xs1, xs2) do
-      nil ->
-        nil
-
-      xs ->
-        case coord_overlap(ys1, ys2) do
-          nil ->
-            nil
-
-          ys ->
-            case coord_overlap(zs1, zs2) do
-              nil ->
-                nil
-
-              zs ->
-                [xs, ys, zs]
-            end
-        end
+    with {:ok, xs} <- coord_overlap(xs1, xs2),
+         {:ok, ys} <- coord_overlap(ys1, ys2),
+         {:ok, zs} <- coord_overlap(zs1, zs2) do
+      [xs, ys, zs]
     end
   end
 
@@ -72,7 +51,7 @@ defmodule Aoc2021Ex.Day22 do
     if min > max do
       nil
     else
-      {min, max}
+      {:ok, {min, max}}
     end
   end
 
